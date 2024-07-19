@@ -1,0 +1,97 @@
+[tool.poetry]
+name = "telegram-bot-template"
+version = "0.1.0"
+description = "Aiogram3 bot template"
+authors = ["NotBupyc"]
+readme = "README.md"
+package-mode = false
+
+[tool.poetry.dependencies]
+python = "^3.11"
+
+aiogram = "^3.10.0"
+sqlalchemy = "^2.0.23"
+alembic = "^1.13.1"
+pydantic = "^2.7.3"
+pydantic-settings = "^2.3.1"
+cachetools = "^5.3.3"
+redis = "^5.0.5"
+pytz = "^2024.1"
+psutil = "^5.9.8"
+psycopg2-binary = "^2.9.9"
+asyncpg = "^0.29.0"
+
+
+[tool.poetry.group.dev.dependencies]
+ruff = "^0.4.8"
+mypy = "^1.10.0"
+pre-commit = "^3.7.1"
+
+
+[tool.poetry.group.test.dependencies]
+pytest = "^8.2.2"
+pytest-asyncio = "^0.23.7"
+
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+filterwarnings = "ignore::DeprecationWarning"
+addopts = "-v -s"
+
+[tool.ruff]
+fix = true
+unsafe-fixes = true
+line-length = 125
+cache-dir = "/tmp/ruff-cache/"
+extend-exclude = ["migrations"]
+lint.select = [
+    "C4",
+    "E",
+    "F",
+    "T10",
+    "T20",
+    "Q",
+    "RET",
+]
+
+
+
+[tool.ruff.lint.isort]
+no-lines-before = ["future", "standard-library"]
+known-local-folder = ["bot", ]
+
+[tool.ruff.lint.extend-per-file-ignores]
+"tests/*.py" = ["ANN401", "S101", "S311"]
+
+[tool.mypy]
+python_version = "3.11"
+plugins = ["pydantic.mypy", "sqlalchemy.ext.mypy.plugin"]
+files = "bot/*.py"
+ignore_missing_imports = false
+warn_return_any = true
+warn_unused_configs = true
+show_error_codes = true
+show_error_context = true
+pretty = true
+disallow_subclassing_any = true
+disallow_any_generics = true
+disallow_untyped_calls = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+check_untyped_defs = true
+disallow_untyped_decorators = true
+no_implicit_optional = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+follow_imports_for_stubs = true
+namespace_packages = true
+show_absolute_path = true
+
+
+[[tool.mypy.overrides]]
+module = "asyncpg.*"
+ignore_missing_imports = true
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"

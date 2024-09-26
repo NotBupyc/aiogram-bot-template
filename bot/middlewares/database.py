@@ -97,7 +97,7 @@ class GetChat(BaseMiddleware):
         return None
 
 
-def _setup_get_repo_middleware(dp: Dispatcher):
+def setup_get_repo_middleware(dp: Dispatcher):
     """
     Setup GetRepo middleware for handlers
     :param dp:
@@ -114,7 +114,7 @@ def _setup_get_repo_middleware(dp: Dispatcher):
     dp.chat_member.middleware.register(GetRepo())
 
 
-def _setup_get_user_middleware(dp: Dispatcher):
+def setup_get_user_middleware(dp: Dispatcher):
     """
     Setup GetUser middleware for handlers
 
@@ -131,7 +131,7 @@ def _setup_get_user_middleware(dp: Dispatcher):
     dp.chat_member.middleware.register(GetUser())
 
 
-def _setup_get_chat_middleware(dp: Dispatcher):
+def setup_get_chat_middleware(dp: Dispatcher):
     """
     Setup GetChat middleware for handlers
 
@@ -148,14 +148,3 @@ def _setup_get_chat_middleware(dp: Dispatcher):
     dp.chat_member.middleware.register(GetChat())
 
 
-def setup(dp: Dispatcher):
-    """
-    Setup All middlewares related to the database
-
-    :param dp:
-    :return:
-    """
-
-    _setup_get_repo_middleware(dp)
-    _setup_get_user_middleware(dp)
-    _setup_get_chat_middleware(dp)

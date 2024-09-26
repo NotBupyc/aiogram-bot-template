@@ -41,10 +41,11 @@ class ThrottlingMiddleware(BaseMiddleware):
         return await handler(event, data)
 
 
-def _setup_throttling_middleware(dp: Dispatcher, rate_limit: float = 1.5):
+def setup_throttling_middleware(dp: Dispatcher, rate_limit: float = 1.5):
     """
     Setup Throttling middleware for handlers
 
+    :param rate_limit:
     :param dp:
     :return:
     """
@@ -52,6 +53,3 @@ def _setup_throttling_middleware(dp: Dispatcher, rate_limit: float = 1.5):
     dp.message.middleware.register(ThrottlingMiddleware(rate_limit))
     dp.callback_query.middleware.register(ThrottlingMiddleware(rate_limit))
 
-
-def setup(dp: Dispatcher, rate_limit: float):
-    _setup_throttling_middleware(dp, rate_limit)

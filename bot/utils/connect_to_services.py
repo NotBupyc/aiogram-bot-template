@@ -19,7 +19,7 @@ async def test_redis_pool() -> None:
     )
 
     server = await redis_pool.info("server")
-    logger.info("Successful connected to Redis(%s).", server["redis_version"])
+    logger.debug("Successful connected to Redis(%s).", server["redis_version"])
 
 
 async def test_database_pool() -> None:
@@ -33,4 +33,4 @@ async def test_database_pool() -> None:
         else:
             version = "unknown"
 
-        logger.info("Successful connected to %s(%s). Ping: %s ms", settings.db.used, version, ping)
+        logger.debug("Successful connected to %s(%s). Ping: %s ms", settings.db.used, version, ping)

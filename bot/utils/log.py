@@ -7,37 +7,40 @@ import traceback
 from datetime import datetime
 from logging import LogRecord, StreamHandler
 from logging.handlers import RotatingFileHandler
-from pathlib import Path
 
 from aiogram import Bot
 
 from bot.config import DEFAULT_TZ, bot
 from bot.settings import settings, LogDir
 
+TIME_FORMAT = "%Y-%m-%d"
+
 
 class DailyRotatingFileHandler(RotatingFileHandler):
     def __init__(
         self,
-        basedir: Path | str,
         mode: str = "a",
         maxBytes: int = 0,  # noqa: N803
         backupCount: int = 0,  # noqa: N803
         encoding: str | None = None,
         delay: bool = False,
     ) -> None:
-        self.basedir = basedir
-        self.today: datetime = datetime.now(DEFAULT_TZ)
-
         self.baseFilename = self.get_filename()
+        self.today = self._today()
         RotatingFileHandler.__init__(self, self.baseFilename, mode, maxBytes, backupCount, encoding, delay)
 
-    def get_filename(self) -> str:
+    def _today(self) -> datetime:
+        self.today = datetime.now()
+        return self.today
+
+    @staticmethod
+    def get_filename() -> str:
         """
         @summary: Return logFile name string formatted to "today.log.alias"
         """
-        self.today = datetime.now(DEFAULT_TZ)
-        basename_ = self.today.strftime("%Y-%m-%d") + ".log"
-        return str(Path(self.basedir) / basename_)
+        today = datetime.now(DEFAULT_TZ)
+        file_name = today.strftime(TIME_FORMAT) + ".log"
+        return str(LogDir / file_name)
 
     def shouldRollover(self, record: LogRecord) -> int:  # noqa: N802
         """
@@ -58,10 +61,11 @@ class DailyRotatingFileHandler(RotatingFileHandler):
             if self.stream.tell() + len(msg) >= int(self.maxBytes):
                 return 1
 
-        if self.today != datetime.now(DEFAULT_TZ):
+        if self.today != self._today:
             self.baseFilename = self.get_filename()
             return 1
 
+        self.baseFilename = self.get_filename()
         return 0
 
 
@@ -71,6 +75,7 @@ class TelegramHandler(logging.Handler):
         "<b> ❓ Error: {error} </b>\n"
         '<pre><code class="language-py">{traceback}</code></pre> \n'
     )
+    ERROR_MESSAGE_WITHOUT_EXC_INFO = "ERROR: {message}"
     WARNING_MESSAGE = ""
     INFO_MESSAGE = "{date}: {message}"
 
@@ -110,15 +115,18 @@ class TelegramHandler(logging.Handler):
 
     def send_extra_logs(self, record: LogRecord) -> None:
         exc = "\n".join(traceback.format_exc().splitlines()[-13:])
-        error = f"{record.exc_info[0].__name__}: {str(record.exc_info[1])}"
+        if not record.exc_info:
+            message = self.ERROR_MESSAGE_WITHOUT_EXC_INFO.format(message=record.message)
+        else:
+            error = f"{record.exc_info[0].__name__}: {str(record.exc_info[1])}"
 
-        message = self.ERROR_MESSAGE.format(
-            module=html.escape(f"<file {record.filename}>"),
-            line=record.lineno,
-            func=html.escape(record.funcName),
-            error=html.escape(error),
-            traceback=html.escape(exc),
-        )
+            message = self.ERROR_MESSAGE.format(
+                module=html.escape(f"<file {record.filename}>"),
+                line=record.lineno,
+                func=html.escape(record.funcName),
+                error=html.escape(error),
+                traceback=html.escape(exc),
+            )
         self.loop.create_task(self.send(message))
 
     async def send_logs(self) -> None:
@@ -135,7 +143,7 @@ class TelegramHandler(logging.Handler):
         self.buffer = []
 
     def add_log(self, record: LogRecord) -> None:
-        text = self.INFO_MESSAGE.format(date=datetime.now().strftime("%H.%M.%S"), message=record.getMessage())
+        text = self.INFO_MESSAGE.format(date=datetime.now().strftime("%H:%M:%S"), message=record.getMessage())
         self.buffer.append(text)
 
     def split_logs(self) -> list[list[str]]:
@@ -162,7 +170,7 @@ MAIN_FORMATTER = logging.Formatter(
 
 
 def _get_daily_handler() -> DailyRotatingFileHandler:
-    daily_handler = DailyRotatingFileHandler(LogDir)
+    daily_handler = DailyRotatingFileHandler()
     daily_handler.setFormatter(MAIN_FORMATTER)
     daily_handler.setLevel(logging.DEBUG)
 
@@ -195,3 +203,4 @@ def init_logger() -> None:
     logging.getLogger("aiogram").setLevel(logging.ERROR)
     logging.getLogger("asyncio").setLevel(logging.ERROR)
     logging.getLogger("apscheduler").setLevel(logging.ERROR)
+    logging.getLogger("tzlocal").setLevel(logging.ERROR)

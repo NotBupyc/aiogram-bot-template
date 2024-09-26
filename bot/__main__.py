@@ -48,6 +48,7 @@ async def on_shutdown(bot: Bot) -> None:
 
 async def _main() -> None:
     logger.info("Starting bot...")
+    logging.getLogger().addHandler(_get_telegram_handler())
 
     if settings.redis.use:
         try:
@@ -74,7 +75,6 @@ async def _main() -> None:
     await bot.delete_webhook(drop_pending_updates=settings.bot.drop_pending_updates)
 
     with contextlib.suppress(KeyboardInterrupt, SystemExit):
-        logging.getLogger().addHandler(_get_telegram_handler())
         await dp.start_polling(bot)
 
 

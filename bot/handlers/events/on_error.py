@@ -60,5 +60,5 @@ async def error_handler(exception: ErrorEvent) -> None:
         return
 
     logger.error(
-        "Error, user=%s id=%s chat_id=%s", user_full_name, user_id, chat_id if chat_id else "No chat", exc_info=True
+        f"User={user_full_name} id={user_id} chat_id={chat_id if chat_id else 'No chat'}", exc_info=True
     )

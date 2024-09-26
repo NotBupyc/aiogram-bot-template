@@ -8,6 +8,7 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 from redis.asyncio import Redis
 
+from bot.enums.db import Databases, PostgreSQLDrivers, MySQLDrivers
 
 load_dotenv(find_dotenv())
 
@@ -24,7 +25,7 @@ class BotSettings(BaseSettings):
 
 
 class DatabaseSettings(BaseSettings):
-    used: Literal["PostgreSQL", "MySQL"] = "PostgreSQL"
+    used: Databases = Databases.PostgreSQl
     ip: str
     user: str
     password: str
@@ -34,10 +35,16 @@ class DatabaseSettings(BaseSettings):
 
     model_config = SettingsConfigDict(env_prefix="DB_")
 
-    def build_postgres_url(self, driver: Literal["psycopg2", "asyncpg"] = "asyncpg") -> str:
+    def build_postgres_url(
+            self,
+            driver: PostgreSQLDrivers = PostgreSQLDrivers.ASYNC_DRIVER
+    ) -> str:
         return f"postgresql+{driver}://" f"{self.user}:{self.password}" f"@{self.ip}/{self.name}"
 
-    def build_mysql_url(self, driver: Literal["pymysql", "asyncmy"] = "asyncmy") -> str:
+    def build_mysql_url(
+            self,
+            driver: MySQLDrivers = MySQLDrivers.SYNC_DRIVER
+    ) -> str:
         return f"mysql+{driver}://" f"{self.user}:{self.password}" f"@{self.ip}/{self.name}"
 
 

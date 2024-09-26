@@ -3,7 +3,7 @@ from logging.config import fileConfig
 from alembic import context
 from sqlalchemy import engine_from_config, pool
 
-
+from bot.enums.db import Databases, PostgreSQLDrivers, MySQLDrivers
 from bot.settings import settings
 
 # this is the Alembic Config object, which provides
@@ -14,22 +14,20 @@ from bot.settings import settings
 config = context.config
 
 
-
 # Interpret the config file for Python logging.
 # This line sets up loggers basically.
 if config.config_file_name is not None:
     fileConfig(config.config_file_name)
 
 # Set sqlalchemy.url
-if settings.db.used == "PostgreSQL":
-    url = settings.db.build_postgres_url(driver="psycopg2")
+if settings.db.used == Databases.PostgreSQl:
+    url = settings.db.build_postgres_url(driver=PostgreSQLDrivers.SYNC_DRIVER)
 else:
-    url = settings.db.build_mysql_url(driver="pymysql")
+    url = settings.db.build_mysql_url(driver=MySQLDrivers.SYNC_DRIVER)
 
 config.set_main_option(
     "sqlalchemy.url",
     url
-
 )
 
 # add your model's MetaData object here

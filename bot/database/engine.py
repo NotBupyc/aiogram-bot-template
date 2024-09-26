@@ -8,12 +8,13 @@ from sqlalchemy import NullPool
 from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine
 
 from bot.database.repos import Repositories
+from bot.enums.db import Databases
 
 from bot.settings import settings
 
 logger = logging.getLogger("Database")
 
-URL = settings.db.build_postgres_url() if settings.db.used == "PostgreSQL" else settings.db.build_mysql_url()
+URL = settings.db.build_postgres_url() if settings.db.used == Databases.PostgreSQl else settings.db.build_mysql_url()
 
 
 engine = create_async_engine(URL, future=True, poolclass=NullPool, echo=settings.debug_mode)

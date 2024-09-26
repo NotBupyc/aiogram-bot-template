@@ -13,9 +13,10 @@ from bot.database import Repositories
 from bot.database.models import Chat
 
 router = Router()
-logger = logging.getLogger()
+logger = logging.getLogger("chat_events")
 
-IS_GROUP = F.chat.type in [ChatType.GROUP, ChatType.SUPERGROUP]
+IS_GROUP = F.chat.type.in_([ChatType.GROUP, ChatType.SUPERGROUP])
+IS_CHANNEL = F.chat.type == ChatType.CHANNEL
 
 @router.my_chat_member(
     ChatMemberUpdatedFilter(member_status_changed=JOIN_TRANSITION),
@@ -69,3 +70,4 @@ async def on_user_leave(event: ChatMemberUpdated, chat: Chat) -> None:
 
     await event.answer(f"👋 Goodbuy {event.from_user.full_name}")
     logger.info(f"{from_user.full_name} was left from {chat_.title}({chat_.id})")
+

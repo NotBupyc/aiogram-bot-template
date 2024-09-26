@@ -3,20 +3,20 @@
 # Imports
 from __future__ import annotations
 
+from datetime import datetime
 from typing import Any
 
-from sqlalchemy import BigInteger, Column, DateTime, func
+from sqlalchemy import BigInteger, Column, DateTime, func, Integer
 from sqlalchemy.orm import declarative_base, DeclarativeBase
+from sqlalchemy.orm import Mapped, mapped_column
 
 Base = declarative_base()
-
-DeclarativeBase
 
 
 class BaseModel(Base):
     __abstract__ = True
 
-    id = Column(BigInteger, unique=True, autoincrement=True, nullable=False, primary_key=True)
+    id: Mapped[int] = mapped_column(Integer, unique=True, autoincrement=True, nullable=False, primary_key=True)
 
     @property
     def to_dict(self) -> dict[str, Any]:
@@ -29,5 +29,5 @@ class BaseModel(Base):
 class DatetimeModel(Base):
     __abstract__ = True
 
-    created_at = Column(DateTime(), server_default=func.now())
-    updated_at = Column(DateTime(), nullable=True)
+    created_at: Mapped[datetime] = mapped_column(DateTime(), server_default=func.now())
+    updated_at: Mapped[datetime] = mapped_column(DateTime(), server_onupdate=func.now(), nullable=True)

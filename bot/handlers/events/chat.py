@@ -6,7 +6,7 @@ from aiogram.filters import (
     JOIN_TRANSITION,
     LEAVE_TRANSITION,
 )
-from aiogram.types import ChatMemberUpdated
+from aiogram.types import ChatMemberUpdated, ChatBoostUpdated
 from aiogram.enums.chat_type import ChatType
 
 from bot.database import Repositories
@@ -71,3 +71,11 @@ async def on_user_leave(event: ChatMemberUpdated, chat: Chat) -> None:
     await event.answer(f"👋 Goodbuy {event.from_user.full_name}")
     logger.info(f"{from_user.full_name} was left from {chat_.title}({chat_.id})")
 
+
+@router.chat_boost(IS_GROUP)
+async def chat_boost(chat_boost: ChatBoostUpdated):
+    ...
+
+@router.removed_chat_boost(IS_GROUP)
+async def remove_chat_boost(chat_boost: ChatBoostUpdated):
+    ...

@@ -23,20 +23,6 @@ make install-dev
 ```
 
 ---
-### Installing modules for SQLAlchemy to work with databases
-
-#### For PostgreSQL
-```bash
-poetry add asyncpg psycopg2-binary
-````
-#### for MySQL
-```bash
-poetry add pymysql asyncmy
-```
-
-Default database - `PostgreSQL`
-
----
 ### Configure environment variables
 1. Copy file `.env.example` and rename it to .env
 2. Open it and configure it
@@ -45,6 +31,20 @@ Default database - `PostgreSQL`
 # Redis settings
 REDIS_USE=True
 ```
+
+---
+### Installing modules for SQLAlchemy to work with databases
+
+#### For PostgreSQL
+```bash
+poetry add asyncpg 
+````
+#### for MySQL
+```bash
+poetry add asyncmy
+```
+
+Default database - `PostgreSQL`. You can change this in .env `DB_USED`
 
 ### Migrations
 For migrations using `Alembic`
@@ -68,6 +68,7 @@ make start
 - In `bot/filters` there are already several middlewares in the folder(IsAdmin)
 - `DailyRotatingFileHandler` - logs are written to a file with the current date from 00:00 to 23:59 and stored in the `logs` folder
 - `TelegramHandler` - logs are sent to the telegram chat
+
 ## Used technologies:
 - [Aiogram 3.x](https://github.com/aiogram/aiogram) (Telegram bot framework)
 - [SQLAlchemy](https://docs.sqlalchemy.org/en/20/) (working with database from Python)

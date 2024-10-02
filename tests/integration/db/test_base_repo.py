@@ -8,7 +8,7 @@ async def test_create(repo: Repositories):
 
     assert us.id == TEST_USER.id
     assert us.username == TEST_USER.username
-    assert us.user_id == TEST_USER.user_id
+    assert us.id == TEST_USER.id
 
 
 async def test_get(repo: Repositories):
@@ -19,7 +19,7 @@ async def test_get(repo: Repositories):
 
     assert us.id == user.id
     assert us.username == user.username
-    assert us.user_id == user.user_id
+    assert us.id == user.id
 
 
 async def test_update(repo: Repositories):

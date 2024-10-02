@@ -26,7 +26,7 @@ async def get_user_by_username(repo: Repositories, username: str) -> User | None
 
     for user in users:
         with contextlib.suppress(TelegramBadRequest):
-            us = await bot.get_chat(user.user_id)
+            us = await bot.get_chat(user.id)
             current_username = us.username.lower() if us.username else None
 
             if username == current_username:

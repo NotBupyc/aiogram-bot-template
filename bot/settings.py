@@ -37,15 +37,13 @@ class DatabaseSettings(BaseSettings):
 
     def build_postgres_url(
             self,
-            driver: PostgreSQLDrivers = PostgreSQLDrivers.ASYNC_DRIVER
     ) -> str:
-        return f"postgresql+{driver}://" f"{self.user}:{self.password}" f"@{self.ip}/{self.name}"
+        return f"postgresql+{PostgreSQLDrivers.ASYNC_DRIVER}://" f"{self.user}:{self.password}" f"@{self.ip}/{self.name}"
 
     def build_mysql_url(
             self,
-            driver: MySQLDrivers = MySQLDrivers.SYNC_DRIVER
     ) -> str:
-        return f"mysql+{driver}://" f"{self.user}:{self.password}" f"@{self.ip}/{self.name}"
+        return f"mysql+{MySQLDrivers.ASYNC_DRIVER}://" f"{self.user}:{self.password}" f"@{self.ip}/{self.name}"
 
 
 class RedisSettings(BaseSettings):

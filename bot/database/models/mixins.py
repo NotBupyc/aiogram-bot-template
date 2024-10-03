@@ -10,14 +10,14 @@ if TYPE_CHECKING:
     from .user import User
 
 class ReprMixin:
-    __repr_max_length = 25
-    __repr_attrs = []
+    _repr_max_length = 25
+    _repr_attrs = []
 
     def _repr_attrs_str(self):
-        max_length = self.__repr_max_length
+        max_length = self._repr_max_length
 
         values = []
-        for key in self.__repr_attrs:
+        for key in self._repr_attrs:
             if not hasattr(self, key):
                 raise KeyError("{} has incorrect attribute '{}' in "
                                "__repr__attrs__".format(self.__class__, key))
@@ -71,21 +71,21 @@ class SerializeMixin:
         return result
 
 class DateTimeMixin:
-    __datetime_func = func.now()
-    __datetime_timezone: bool = False
+    _datetime_func = func.now()
+    _datetime_timezone: bool = False
 
     @declared_attr
     def created_at(cls) -> Mapped[datetime]:
         return mapped_column(
-            DateTime(timezone=cls.__datetime_timezone),
-            server_default=cls.__datetime_func,
+            DateTime(timezone=cls._datetime_timezone),
+            server_default=cls._datetime_func,
     )
 
     @declared_attr
     def updated_at(cls) -> Mapped[datetime]:
         return mapped_column(
-            DateTime(timezone=cls.__datetime_timezone),
-            server_onupdate=cls.__datetime_func
+            DateTime(timezone=cls._datetime_timezone),
+            server_onupdate=cls._datetime_func
         )
 
 

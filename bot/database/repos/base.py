@@ -7,17 +7,17 @@ from typing import TYPE_CHECKING, Any, Sequence, TypeVar
 from sqlalchemy import func, select
 from sqlalchemy.orm import selectinload
 
-from bot.database.models.base import BaseModel
+from bot.database.models.base import Base
 
 if TYPE_CHECKING:
     from sqlalchemy.ext.asyncio import AsyncSession
 
 
-Model = TypeVar("Model", bound=BaseModel)
+Model = TypeVar("Model", bound=Base)
 
 
 class BaseRepo(ABC):
-    model: BaseModel
+    model: Base
 
     def __init__(self, session: AsyncSession) -> None:
         self.session = session

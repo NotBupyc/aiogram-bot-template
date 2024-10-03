@@ -1,10 +1,10 @@
 from sqlalchemy import Column, String, BigInteger
 from sqlalchemy.orm import Mapped, mapped_column
 
-from bot.database.models.base import BaseModel
+from bot.database.models.base import Base
 
 
-class Chat(BaseModel):
+class Chat(Base):
     __tablename__ = "chats"
 
     chat_id: Mapped[int] = mapped_column(BigInteger, unique=True, nullable=False)

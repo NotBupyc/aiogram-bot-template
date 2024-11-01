@@ -7,7 +7,7 @@ from sqlalchemy import func, DateTime, BigInteger, ForeignKey
 from sqlalchemy.orm import mapped_column, Mapped, declared_attr, relationship
 
 if TYPE_CHECKING:
-    from .user import User
+    from .user_models import User
 
 class ReprMixin:
     _repr_max_length = 25
@@ -20,7 +20,7 @@ class ReprMixin:
         for key in self._repr_attrs:
             if not hasattr(self, key):
                 raise KeyError("{} has incorrect attribute '{}' in "
-                               "__repr__attrs__".format(self.__class__, key))
+                               "_repr_attrs_".format(self.__class__, key))
             value = getattr(self, key)
 
             value = str(value)

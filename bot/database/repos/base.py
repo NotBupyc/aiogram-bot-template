@@ -7,7 +7,7 @@ from typing import TYPE_CHECKING, Any, Sequence, TypeVar
 from sqlalchemy import func, select
 from sqlalchemy.orm import selectinload
 
-from bot.database.models.base import Base
+from bot.database.models.base_models import Base
 
 if TYPE_CHECKING:
     from sqlalchemy.ext.asyncio import AsyncSession

@@ -27,7 +27,6 @@ async def bot_added_in_chat(event: ChatMemberUpdated, repo: Repositories, chat: 
     chat_ = event.chat
 
     await event.answer("Hello, thanks for adding me.")
-    await repo.chats.create(chat_id=event.chat.id, title=event.chat.title)
 
     logger.info(f"Bot was added in chat {chat_.title}({chat_.id}",)
 
@@ -40,8 +39,8 @@ async def bot_added_in_chat(event: ChatMemberUpdated, repo: Repositories, chat: 
 async def bot_kicked_from_chat(event: ChatMemberUpdated, repo: Repositories, chat: Chat) -> None:
     chat_ = event.chat
 
-    if chat:
-        await repo.chats.delete(chat)
+    # if chat:
+    #     await repo.chats.delete(chat)
 
     logger.info(f"Bot was kicked from chat {chat_.title}({chat_.id})")
 

@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from aiogram.types import Chat as AiogramChat
 
 from sqlalchemy import select
 from sqlalchemy.orm import selectinload
@@ -11,7 +12,10 @@ from bot.database.models import User, Chat
 class ChatsRepo(BaseRepo):
     model = Chat
 
-    async def get_by_chat_id(self, chat_id: int, *chat_options) -> User | None:
-        q = select(Chat).where(Chat.chat_id == chat_id).options(*[selectinload(i) for i in chat_options])
+    async def create_from_aiogram_model(self, chat: AiogramChat) -> Chat:
+        us = await self.create(
+            id=chat.id,
+            title=chat.title
+        )
+        return us
 
-        return (await self.session.execute(q)).scalar()

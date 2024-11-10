@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from typing import Sequence
-
+from aiogram.types import User as AiogramUser
 from sqlalchemy import select
 from sqlalchemy.orm import selectinload
 
@@ -11,6 +11,13 @@ from bot.database.models import User
 
 class UsersRepo(BaseRepo):
     model = User
+
+    async def create_from_aiogram_model(self, user: AiogramUser) -> User:
+        us = await self.create(
+            id=user.id,
+            username=user.username
+        )
+        return us
 
     async def get_by_user_id(self, user_id: int, *user_options) -> User | None:
         q = select(User).where(User.id == user_id).options(*[selectinload(i) for i in user_options])

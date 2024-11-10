@@ -28,10 +28,7 @@ class BaseRepo(ABC):
 
     async def create(self, **kwargs: dict[str, Any]) -> Model:
         db_obj: Model = self.model(**kwargs)
-        self.session.add(db_obj)
-        await self.session.commit()
-
-        return db_obj
+        return await self.create_from_model(db_obj)
 
     async def create_from_model(self, *db_obj: Model) -> Model | tuple[Model]:
         for i in db_obj:

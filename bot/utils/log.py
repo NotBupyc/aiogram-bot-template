@@ -15,6 +15,12 @@ from bot.settings import settings, LogDir
 
 TIME_FORMAT = "%Y-%m-%d"
 
+MAIN_FORMATTER = logging.Formatter(
+    fmt="%(asctime)s [%(levelname)s]: %(name)s: %(message)s",
+    datefmt="%H:%M:%S",
+    style="%",
+)
+
 
 class DailyRotatingFileHandler(RotatingFileHandler):
     def __init__(
@@ -159,14 +165,6 @@ class TelegramHandler(logging.Handler):
             tmp_length += len(i)
 
         return tmp_list
-
-
-# Formatters
-MAIN_FORMATTER = logging.Formatter(
-    fmt="%(asctime)s [%(levelname)s]: %(name)s: %(message)s",
-    datefmt="%H:%M:%S",
-    style="%",
-)
 
 
 def _get_daily_handler() -> DailyRotatingFileHandler:

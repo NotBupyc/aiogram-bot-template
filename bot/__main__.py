@@ -6,6 +6,7 @@ from datetime import datetime
 from aiogram import Bot
 
 from bot.config import DEFAULT_TZ, bot, dp
+from bot.database.engine import create_database_custom_functions
 from bot.settings import settings
 from bot.utils.bot_commands import set_commands
 from bot.utils.connect_to_services import test_redis_pool, test_database_pool
@@ -48,7 +49,6 @@ async def on_shutdown(bot: Bot) -> None:
 
 async def _main() -> None:
     logger.info("Starting bot...")
-    logging.getLogger().addHandler(_get_telegram_handler())
 
     if settings.redis.use:
         try:
@@ -59,6 +59,7 @@ async def _main() -> None:
                 e,
             )
             exit(1)
+
     try:
         await test_database_pool()
     except ConnectionRefusedError as e:
@@ -69,10 +70,19 @@ async def _main() -> None:
         )
         exit(1)
 
+    try:
+        await create_database_custom_functions()
+    except Exception as e:
+        logger.error("Failed create database functions: %s", e)
+        exit(1)
+
     setup_middlewares(dp)
     setup_routers(dp)
 
     await bot.delete_webhook(drop_pending_updates=settings.bot.drop_pending_updates)
+
+    if settings.log_chat:
+        logging.getLogger().addHandler(_get_telegram_handler())
 
     with contextlib.suppress(KeyboardInterrupt, SystemExit):
         await dp.start_polling(bot)

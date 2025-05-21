@@ -5,7 +5,6 @@
 - [Python](https://www.python.org/) 3.11+
 - [Poetry](https://python-poetry.org/)
 - [PostgreSQL](https://www.postgresql.org/) or [MySQL](https://www.mysql.com/)
-- [Redis](https://redis.io/) (Optional)
 
 ## Configure
 
@@ -37,7 +36,7 @@ REDIS_USE=True
 
 #### For PostgreSQL
 ```bash
-poetry add asyncpg 
+poetry add asyncpg
 ````
 #### for MySQL
 ```bash
@@ -53,7 +52,7 @@ For migrations using `Alembic`
 make migration message=message
 ```
 
-#### upgrade database
+#### Upgrade database
 ```bash
 make migrate
 ```
@@ -61,6 +60,11 @@ make migrate
 ```bash
 make start
 ```
+#####  Via docker
+```bash
+make docker-run
+```
+
 
 ## Features
 - Flexible choice between `PostgreSQL` and `MySQL`
@@ -73,4 +77,5 @@ make start
 - [Aiogram 3.x](https://github.com/aiogram/aiogram) (Telegram bot framework)
 - [SQLAlchemy](https://docs.sqlalchemy.org/en/20/) (working with database from Python)
 - [Alembic](https://alembic.sqlalchemy.org/en/latest/) (lightweight database migration tool)
-- [Redis](https://redis.io/docs/) (Optional)
+- [Redis](https://redis.io/) (Optional)
+- [Docker](https://www.docker.com/) (Optional)

@@ -1,0 +1,10 @@
+
+services:
+  bot:
+    container_name: aiogram-bot-template
+    build:
+      context: .
+      dockerfile: Dockerfile
+    env_file:
+      - .env
+    command: "make start"

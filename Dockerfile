@@ -1,17 +1,20 @@
-FROM python:3.11-slim-buster
+FROM python:3.11-slim
 
-WORKDIR /Bot
-COPY . .
+WORKDIR /bot
 
-ENV PIP_NO_CACHE_DIR=1 \
-    PYTHONUNBUFFERED=1 \
-    PYTHONDONTWRITEBYTECODE=1 \
-    PIP_ROOT_USER_ACTION=ignore
-
+# install make
 RUN apt-get update && \
     apt-get install -y --no-install-recommends make && \
-    pip install poetry && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
+    apt-get clean && rm -rf /var/lib/apt/lists/*
 
-RUN make install && poetry update
+# install poetry
+RUN pip install poetry
+RUN poetry config virtualenvs.create false
+
+# Copy dependencies
+COPY pyproject.toml poetry.lock ./
+
+# install packages
+RUN poetry install --no-interaction --no-root
+
+COPY . .

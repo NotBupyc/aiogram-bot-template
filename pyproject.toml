@@ -18,6 +18,7 @@ cachetools = "^5.3.3"
 redis = "^5.0.5"
 pytz = "^2024.1"
 psutil = "^5.9.8"
+asyncpg = "^0.30.0"
 
 
 [tool.poetry.group.dev.dependencies]

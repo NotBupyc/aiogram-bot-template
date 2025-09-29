@@ -1,16 +1,12 @@
 from __future__ import annotations
-from typing import TYPE_CHECKING, Any, Awaitable, Callable
+from typing import Any, Awaitable, Callable
 
 from aiogram import BaseMiddleware, Dispatcher
 from cachetools import TTLCache
 
 from bot.settings import settings
 
-if TYPE_CHECKING:
-    from aiogram.types import TelegramObject, CallbackQuery, Message
-
-
-# from app.config import settings
+from aiogram.types import TelegramObject, CallbackQuery, Message
 
 
 class ThrottlingMiddleware(BaseMiddleware):
@@ -52,4 +48,3 @@ def setup_throttling_middleware(dp: Dispatcher, rate_limit: float = 1.5):
 
     dp.message.middleware.register(ThrottlingMiddleware(rate_limit))
     dp.callback_query.middleware.register(ThrottlingMiddleware(rate_limit))
-

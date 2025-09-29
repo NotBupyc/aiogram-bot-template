@@ -9,7 +9,7 @@ from bot.config import DEFAULT_TZ, bot, dp
 from bot.database.engine import create_database_custom_functions
 from bot.settings import settings
 from bot.utils.bot_commands import set_commands
-from bot.utils.connect_to_services import test_redis_pool, test_database_pool
+from bot.services.test_connection import test_redis_pool, test_database_pool
 from bot.utils.log import init_logger, _get_telegram_handler
 from bot.handlers import setup_routers
 from bot.middlewares import setup_middlewares
